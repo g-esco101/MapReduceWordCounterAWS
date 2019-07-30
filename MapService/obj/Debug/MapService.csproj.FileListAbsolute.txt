@@ -1,0 +1,6 @@
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\bin\MapService.dll.config
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\bin\MapService.dll
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\bin\MapService.pdb
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\obj\Debug\MapService.csproj.CoreCompileInputs.cache
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\obj\Debug\MapService.dll
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\obj\Debug\MapService.pdb
