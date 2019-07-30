@@ -1,0 +1,6 @@
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\bin\ReduceService.dll.config
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\bin\ReduceService.dll
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\bin\ReduceService.pdb
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\obj\Debug\ReduceService.csproj.CoreCompileInputs.cache
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\obj\Debug\ReduceService.dll
+C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\obj\Debug\ReduceService.pdb
