@@ -1,2 +1,0 @@
-# MapReduceWordCounter
-        A SOC application and the SOAP services that collectively count the number of words in a text file via MapReduce. It binds to the services dynamically. To ensure that the tasks are performed in parallel, multithreading is implemented: each thread receives a partition of the words in the text file and invokes the web services. The web services are configured such that a new instance is created per call. It mimics the Hadoop process by distributing the data and the processing over a network.
