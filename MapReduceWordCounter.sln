@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapReduceWordCounter", "MapReduceWordCounter\MapReduceWordCounter.csproj", "{191DBE77-A2EC-480C-9722-4D98DB84A841}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1C1121A5-FEB0-4058-9F58-4C4B9A8306B9} = {1C1121A5-FEB0-4058-9F58-4C4B9A8306B9}
+		{9DCC91B1-5977-46A1-8DD6-7E2AF6F2585F} = {9DCC91B1-5977-46A1-8DD6-7E2AF6F2585F}
+		{238D91D5-CDEB-4B63-A6B1-C4B7CB858677} = {238D91D5-CDEB-4B63-A6B1-C4B7CB858677}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CombineService", "CombineService\CombineService.csproj", "{1C1121A5-FEB0-4058-9F58-4C4B9A8306B9}"
 EndProject

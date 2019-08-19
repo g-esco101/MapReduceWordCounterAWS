@@ -4,3 +4,10 @@ C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\bin\MapService.
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\obj\Debug\MapService.csproj.CoreCompileInputs.cache
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\obj\Debug\MapService.dll
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\MapService\obj\Debug\MapService.pdb
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\MapService\bin\MapService.dll.config
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\MapService\bin\MapService.dll
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\MapService\bin\MapService.pdb
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\MapService\obj\Debug\MapService.csprojAssemblyReference.cache
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\MapService\obj\Debug\MapService.csproj.CoreCompileInputs.cache
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\MapService\obj\Debug\MapService.dll
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\MapService\obj\Debug\MapService.pdb

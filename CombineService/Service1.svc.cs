@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-
+using System.Threading.Tasks;
 
 namespace CombineService
 {
@@ -9,18 +9,21 @@ namespace CombineService
     {
         // Adds the values of a dictionary of key-value pair where the key is the thread
         // id & the value is the total number of word occurrences & returns the sum.
-        public int CombineFunction(IDictionary<string, int> reduceOutput)
+        public async Task<int> CombineAsync(IDictionary<string, int> reduceOutput)
         {
             int sum = 0;
-            try
+            return await Task<int>.Factory.StartNew(() =>
             {
-                foreach (var element in reduceOutput)
+                try
                 {
-                    sum += element.Value;
+                    foreach (var element in reduceOutput)
+                    {
+                        sum += element.Value;
+                    }
                 }
-            }
-            catch { }
-            return sum;
+                catch { }
+                return sum;
+            });
         }
     }
 }

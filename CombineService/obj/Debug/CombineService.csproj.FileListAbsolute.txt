@@ -5,3 +5,10 @@ C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\CombineService\obj\Debug\C
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\CombineService\obj\Debug\CombineService.csproj.CoreCompileInputs.cache
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\CombineService\obj\Debug\CombineService.dll
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\CombineService\obj\Debug\CombineService.pdb
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\CombineService\bin\CombineService.dll.config
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\CombineService\bin\CombineService.dll
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\CombineService\bin\CombineService.pdb
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\CombineService\obj\Debug\CombineService.csprojAssemblyReference.cache
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\CombineService\obj\Debug\CombineService.csproj.CoreCompileInputs.cache
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\CombineService\obj\Debug\CombineService.dll
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\CombineService\obj\Debug\CombineService.pdb

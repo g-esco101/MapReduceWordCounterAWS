@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-
+using System.Threading.Tasks;
 
 namespace CombineService
 {
@@ -9,6 +9,6 @@ namespace CombineService
     {
         // Implementation of the Combine service interface.
         [OperationContract]
-        int CombineFunction(IDictionary<string, int> reduceOutput); //endpoint
+        Task<int> CombineAsync(IDictionary<string, int> reduceOutput); //endpoint
     }
 }

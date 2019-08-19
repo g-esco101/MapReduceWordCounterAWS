@@ -13,40 +13,13 @@ namespace MapReduceWordCounter {
     public partial class _Default {
         
         /// <summary>
-        /// TextBoxMap control.
+        /// partitionCount control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxMap;
-        
-        /// <summary>
-        /// TextBoxReduce control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxReduce;
-        
-        /// <summary>
-        /// TextBoxCombiner control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBoxCombiner;
-        
-        /// <summary>
-        /// threadCount control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox threadCount;
+        protected global::System.Web.UI.WebControls.TextBox partitionCount;
         
         /// <summary>
         /// FileUpload1 control.

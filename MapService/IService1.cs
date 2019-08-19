@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
-
+using System.Threading.Tasks;
 
 namespace MapService
 {
@@ -9,6 +9,6 @@ namespace MapService
     {
         // Implementation of the Map service interface.
         [OperationContract]
-        IDictionary<string, int> MapFunction(string[] wordsArray);  // endpoint
+        Task<IDictionary<string, int>> MapAsync(string[] wordsArray);  // endpoint
     }
 }

@@ -4,3 +4,10 @@ C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\bin\ReduceSe
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\obj\Debug\ReduceService.csproj.CoreCompileInputs.cache
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\obj\Debug\ReduceService.dll
 C:\Users\LeonardoDaVinci\Desktop\MapReduceWordCounter\ReduceService\obj\Debug\ReduceService.pdb
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\ReduceService\bin\ReduceService.dll.config
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\ReduceService\bin\ReduceService.dll
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\ReduceService\bin\ReduceService.pdb
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\ReduceService\obj\Debug\ReduceService.csproj.CoreCompileInputs.cache
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\ReduceService\obj\Debug\ReduceService.dll
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\ReduceService\obj\Debug\ReduceService.pdb
+C:\Users\LeonardoDaVinci\Git Repositories\MapReduceWordCounterAWS\ReduceService\obj\Debug\ReduceService.csprojAssemblyReference.cache

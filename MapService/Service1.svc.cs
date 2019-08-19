@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace MapService
 {
@@ -8,25 +9,29 @@ namespace MapService
     {
         // Maps an array of words to a dictionary of key-value pairs where
         // each word is a key & the value is the number of times the word occurs in wordsArray. 
-        public IDictionary<string, int> MapFunction(string[] wordsArray)
+        public async Task<IDictionary<string, int>> MapAsync(string[] wordsArray)
         {
             IDictionary<string, int> mapReturn = new Dictionary<string, int>();
-            try
+            //StartNew(Action) - creates and starts a task.
+            return await Task<IDictionary<string, int>>.Factory.StartNew(() =>
             {
-                foreach (string word in wordsArray)
+                try
                 {
-                    if (mapReturn.ContainsKey(word))
+                    foreach (string word in wordsArray)
                     {
-                        mapReturn[word] = mapReturn[word] + 1;
+                        if (mapReturn.ContainsKey(word))
+                        {
+                            mapReturn[word] = mapReturn[word] + 1;
+                        }
+                        else mapReturn.Add(word, 1);
                     }
-                    else mapReturn.Add(word, 1);
                 }
-            }
-            catch
-            {
-                mapReturn.Add("MAP SERVICE ERROR", 0);
-            }
-            return mapReturn;
+                catch
+                {
+                    mapReturn.Add("MAP SERVICE ERROR", 0);
+                }
+                return mapReturn;
+            });
         }
     }
 }

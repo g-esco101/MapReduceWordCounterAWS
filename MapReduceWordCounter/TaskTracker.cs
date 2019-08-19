@@ -1,82 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace MapReduceWordCounter
 {
     public class TaskTracker
     {
-        // Calls Map & Reduce functions.
-        public IDictionary<string, int> MapReduce(string mapUrl, string reduceUrl, string[] wordsArray)
+        // Given an array of strings, it returns IDictionary<string, int> where key is a word in wordArray
+        // & value is the number of its occurences. 
+        public async Task<Dictionary<string, int>> Map(string[] wordArray)
         {
-            return Reduce(reduceUrl, Map(mapUrl, wordsArray));
+            Dictionary<string, int> mapReturn = new Dictionary<string, int>();
+            ServiceReference1.Service1Client myPxy = new ServiceReference1.Service1Client();
+            try
+            {
+                mapReturn = await myPxy.MapAsync(wordArray);
+                myPxy.Close();
+                return mapReturn;
+            }
+            catch (CommunicationException e)
+            {
+                myPxy.Abort();
+            }
+            catch (TimeoutException e)
+            {
+                myPxy.Abort();
+            }
+            catch (Exception e)
+            {
+                myPxy.Abort();
+                throw;
+            }
+            mapReturn.Add("MAP ERROR", 0);
+            return mapReturn;           
         }
 
-        // Dynamically binds to map service. 
-        // Given the URL of the map service's wsdl & an array of strings, it returns IDictionary<string, int> where string is a word in wordArray
-        // & int is the number of times that word appears in the array. 
-        public IDictionary<string, int> Map(string wsdlUri, string[] wordArray)
+        // Given a dictionary of words (keys) & their occurences (values) , it sums the values & returns 
+        // it in a KeyValuePair<string, int> with the thread id as the key.
+        public async Task<KeyValuePair<string, int>> Reduce(Dictionary<string, int> wordCountDictionary)
         {
-            ServiceInstantiation serviceIntantiator = new ServiceInstantiation();
-            IDictionary<string, int> mapReturn = new Dictionary<string, int>();
-            object serviceInstance = serviceIntantiator.instantiateService(wsdlUri);
-            MethodInfo methodInformation = null;
+            KeyValuePair<string, int> reduceReturn;
+            ServiceReference2.Service1Client myPxy = new ServiceReference2.Service1Client();
             try
             {
-                string[] methodNames = serviceIntantiator.getMethodNames(serviceInstance);
-                methodInformation = serviceInstance.GetType().GetMethod(methodNames[0]);
+                reduceReturn = await myPxy.ReduceAsync(wordCountDictionary);
+                myPxy.Close();
+                return reduceReturn;
             }
-            catch (Exception ex)
+            catch (CommunicationException e)
             {
-                System.Diagnostics.Debug.WriteLine("TaskTracker.Map 1st Try ex.Message is " + ex.Message);
+                myPxy.Abort();
             }
-            Object[] parames = new Object[1];
-            parames[0] = wordArray;
-
-            try
+            catch (TimeoutException e)
             {
-                mapReturn = (IDictionary<string, int>)methodInformation.Invoke(serviceInstance, parames);
+                myPxy.Abort();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                mapReturn.Add("MAP ERROR", 0);
-                System.Diagnostics.Debug.WriteLine("TaskTracker.Map 2nd Try ex.Message is " + ex.Message);
-
+                myPxy.Abort();
+                throw;
             }
-            return mapReturn;
-        }
-
-        // Dynamically binds to reduce service.
-        // Given the URL of the reduce service's wsdl & an array of strings, it returns IDictionary<string, int> where string is a word in wordArray
-        // & int is the number of times that word appears in the array. 
-        public IDictionary<string, int> Reduce(string wsdlUri, IDictionary<string, int> wordCountDictionary)
-        {
-            ServiceInstantiation serviceIntantiator = new ServiceInstantiation();
-            IDictionary<string, int> reduceReturn = new Dictionary<string, int>();
-            object serviceInstance = serviceIntantiator.instantiateService(wsdlUri);
-            MethodInfo methodInformation = null;
-            try
-            {
-                string[] methodNames = serviceIntantiator.getMethodNames(serviceInstance);
-                methodInformation = serviceInstance.GetType().GetMethod(methodNames[0]);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("TaskTracker.Reduce 1st Try ex.Message is " + ex.Message);
-            }
-            Object[] parames = new Object[1];
-            parames[0] = wordCountDictionary;
-
-            try
-            {
-                reduceReturn = (IDictionary<string, int>)methodInformation.Invoke(serviceInstance, parames);
-            }
-            catch (Exception ex)
-            {
-                reduceReturn.Add("REDUCE ERROR", 0);
-                System.Diagnostics.Debug.WriteLine("TaskTracker.Reduce 2nd Try ex.Message is " + ex.Message);
-            }
+            reduceReturn = new KeyValuePair<string, int>("REDUCE ERROR", 0);
             return reduceReturn;
+        }
+
+        // Given the result of all the Reduce SOAP calls (via the reduceOutput dictionary properth in,
+        // NameNode) it returns the number of words in the uploaded file.
+        public async Task<int> Combine(Dictionary<string, int> reduced)
+        {
+            int combineReturn = 0;
+            ServiceReference3.Service1Client myPxy = new ServiceReference3.Service1Client();
+            try
+            {
+                combineReturn = await myPxy.CombineAsync(reduced);
+                myPxy.Close();
+                return combineReturn;
+            }
+            catch (CommunicationException e)
+            {
+                myPxy.Abort();
+            }
+            catch (TimeoutException e)
+            {
+                myPxy.Abort();
+            }
+            catch (Exception e)
+            {
+                myPxy.Abort();
+                throw;
+            }
+            return combineReturn;
         }
     }
 }

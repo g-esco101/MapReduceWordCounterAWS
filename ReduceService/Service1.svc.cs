@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading;
-
+using System.Threading.Tasks;
 
 namespace ReduceService
 {
@@ -11,26 +11,27 @@ namespace ReduceService
     {
         // Reduces a dictionary of key-value pairs where each word is a key & the value is the number of times the word occurred
         // to a single key-value pair where the key is the thread id & the value is the total number of word occurrences.
-        public IDictionary<string, int> ReduceFunction(IDictionary<string, int> wordDictionary)
+        public async Task<KeyValuePair<string, int>> ReduceAsync(IDictionary<string, int> wordDictionary)
         {
-            IDictionary<string, int> reduceReturn = new Dictionary<string, int>();
             int sum = 0;
             string key;
-            try
+            return await Task<KeyValuePair<string, int>>.Factory.StartNew(() =>
             {
-                foreach (var element in wordDictionary)
+                try
                 {
-                    sum += element.Value;
+                    foreach (var element in wordDictionary)
+                    {
+                        sum += element.Value;
+                    }
+                    key = Convert.ToString(Thread.CurrentThread.ManagedThreadId);
                 }
-                key = Convert.ToString(Thread.CurrentThread.ManagedThreadId);
-            }
-            catch
-            {
-                key = "REDUCE SERVICE ERROR";
-                sum = 0;
-            }
-            reduceReturn.Add(key, sum);
-            return reduceReturn;
+                catch
+                {
+                    key = "REDUCE SERVICE ERROR";
+                    sum = 0;
+                }
+                return new KeyValuePair<string, int>(key, sum);
+            });
         }
     }
 }

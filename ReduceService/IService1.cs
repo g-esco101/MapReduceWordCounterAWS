@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace ReduceService
 {
@@ -10,7 +11,7 @@ namespace ReduceService
 
         // Implementation of the Reduce service interface.
         [OperationContract]
-        IDictionary<string, int> ReduceFunction(IDictionary<string, int> wordDictionary);   // endpoint
+        Task<KeyValuePair<string, int>> ReduceAsync(IDictionary<string, int> wordDictionary); // endpoint
     }
 
 }

@@ -1,118 +1,110 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Reflection;
+using System.Threading.Tasks;
 
 namespace MapReduceWordCounter
 {
     public class NameNode
     {
-        protected string[] allWords;
-        protected int threadNumber;
-        protected Thread[] threadArray;
-        protected IDictionary<string, int> reduceOutput;
-        protected string mapWsdlUrl;
-        protected string reduceWsdlUrl;
-        protected string combineWsdlUrl;
+        private string[] allWords;
+        private int partitionCount;
+        private Dictionary<string, int> reduceOutput;
 
         // Constructor - stores the arguments as instance variables
-        public NameNode(string mapUrl, string reduceUrl, string combineUrl, string[] allWordsArray, int threadcount)
+        public NameNode(string[] allWordsArray, int partitionCount)
         {
             this.allWords = allWordsArray;
-            this.threadNumber = threadcount;
+            this.partitionCount = partitionCount;
             reduceOutput = new Dictionary<string, int>();
-            this.mapWsdlUrl = mapUrl;
-            this.reduceWsdlUrl = reduceUrl;
-            this.combineWsdlUrl = combineUrl;
         }
 
-        // Partitions all the words in the file into a number of arrays that is equal to the 
-        // thread count & distributes those arrays to a task tracker whose operations
-        // are executed in parallel via multi-threading.
-        public int allocate()
+        // Divides the contents of the word file & calls Combiner.
+        public async Task<int> Allocate()
         {
             int subStringLength = 0;
             int lastSubStringLength = 0;
             int allWordsLength = 0;
+            string[][] partitons = new string[partitionCount][];
             try
             {
                 allWordsLength = allWords.Length;
-                subStringLength = allWordsLength / threadNumber;
-                if (allWordsLength % threadNumber != 0 && threadNumber > 1)
+                subStringLength = allWordsLength / partitionCount;
+                if (allWordsLength % partitionCount != 0 && partitionCount > 1)
                 {
-                    lastSubStringLength = allWordsLength - subStringLength * (threadNumber - 1);
+                    lastSubStringLength = allWordsLength - subStringLength * (partitionCount - 1);
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("NameNode.allocate 1st Try ex.Message is " + ex.Message);
             }
-            threadArray = new Thread[threadNumber];
-            for (int i = 0; i < threadNumber; i++)
+            for (int i = 0; i < partitionCount; i++)
             {
-                // Note: Captured variables could be modified after starting the thread, because they are shared. Making these variables
-                // local to each iteration of the loop ensures that each thread captures a different memory location & they are not modified.
                 string[] subStr = new string[subStringLength];
                 int sLength = subStringLength;
                 try
                 {
-                    if (i == (threadNumber - 1) && lastSubStringLength != 0)
+                    if (i == (partitionCount - 1) && lastSubStringLength != 0)
                     {
                         sLength = lastSubStringLength;
                         subStr = new string[lastSubStringLength];
                     }
                     Array.Copy(allWords, i * subStringLength, subStr, 0, sLength);
+                    partitons[i] = subStr;
                 }
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine("NameNode.allocate 2nd Try ex.Message is " + ex.Message);
                 }
-                TaskTracker tasker = new TaskTracker();
-                threadArray[i] = new Thread(() => {
-                    IDictionary<string, int> mapReduceReturn = tasker.MapReduce(mapWsdlUrl, reduceWsdlUrl, subStr);
-                    foreach (var item in mapReduceReturn)
-                    {
-                        reduceOutput.Add(Thread.CurrentThread.ManagedThreadId.ToString(), item.Value);
-                    }
-                });
-                threadArray[i].Start();
             }
-            return CombineFunction(combineWsdlUrl);
+            return await Combiner(partitons);
         }
 
-        // Dynamically binds to CombineService service. 
-        // Given the URL of the CombineService's wsdl, it returns the number of words in the uploaded file.
-        public int CombineFunction(string wsdlUri)
+        // Calls MapReduce to begin counting the words. Calls AddReduceOutput to add the results of the
+        // Reduce service to the reduceOutput property. 
+        private async Task<int> Combiner(string[][] partitons)
         {
-            for (int i = 0; i < threadNumber; i++)
+            TaskTracker worker = new TaskTracker();
+            KeyValuePair<string, int>[] myKVPs = new KeyValuePair<string, int>[partitionCount];
+            var tasks = new List<Task>();
+            for (int i = 0; i < partitionCount; i++)
             {
-                threadArray[i].Join();
+                myKVPs[i] = await MapReduce(partitons[i]);
             }
-            ServiceInstantiation serviceIntantiator = new ServiceInstantiation();
-            int combineReturn = 0;
-            object serviceInstance = serviceIntantiator.instantiateService(wsdlUri);
-            MethodInfo methodInformation = null;
-            try
+            for (int i = 0; i < partitionCount; i++)
             {
-                string[] methodNames = serviceIntantiator.getMethodNames(serviceInstance);
-                methodInformation = serviceInstance.GetType().GetMethod(methodNames[0]);
+                await AddReduceOutput(myKVPs[i]);
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("NameNode.CombineFunction 1st Try ex.Message is " + ex.Message);
-            }
-            Object[] parames = new Object[1];
-            parames[0] = this.reduceOutput;
+            Task.WaitAll(tasks.ToArray());
+            return await worker.Combine(reduceOutput);
+        }
 
-            try
+        // Calls Map & Reduce functions - which call their respective SOAP services.
+        private async Task<KeyValuePair<string, int>> MapReduce(string[] partition)
+        {
+            TaskTracker worker = new TaskTracker();
+            Dictionary<string, int> mapped = await worker.Map(partition);
+            return await worker.Reduce(mapped);
+        }
+
+        // Adds the result of Reduce to the reduceOutput property.
+        public Task AddReduceOutput(KeyValuePair<string, int> reduceReturn)
+        {
+            return Task.Factory.StartNew(() =>
             {
-                combineReturn = (int)methodInformation.Invoke(serviceInstance, parames);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("NameNode.CombineFunction 2nd Try ex.Message is " + ex.Message);
-            }
-            return combineReturn;
+                try
+                {
+                    if (reduceOutput.ContainsKey(reduceReturn.Key))
+                    {
+                        reduceOutput[reduceReturn.Key] += reduceReturn.Value;
+                    }
+                    else
+                    {
+                        reduceOutput.Add(reduceReturn.Key, reduceReturn.Value);
+                    }
+                }
+                catch { }
+            });
         }
     }
 }
